@@ -68,10 +68,10 @@ for name in glob.glob(datadir + '/lev0/*.fits'):
        
 # Organize Calib Files 
 
-for file in glob.glob(datadir + '/calib/*.fits'):
-    from astropy.io import fits
-    f = fits.open(file) 
-    f[0].header ["SLITNAME"]
+#for file in glob.glob(datadir + '/calib/*.fits'):
+   # from astropy.io import fits
+   # f = fits.open(file) 
+   # f[0].header ["SLITNAME"]
 
 
 date_lt = []
@@ -122,7 +122,7 @@ for date_dir in date_lt:
 	for name in glob.glob(datadir + '/' + date_dir +  '/*.fits'):
 		f = fits.open(name)
     
-		if f[0].header ["MERCURY"] == 'on' or f[0].header["NEON"] == 'on' or f[0].header["ARGON"] == 'on' or f[0].header["CADMIUM"] == 'on' or f[0].header["ZINC"] == 'on' or f[0].header["KRYPTON"] == 'on' or f[0].header["XENON"] == 'on' or f[0].header["FEARGON"] == 'on':
+		if (f[0].header ["MERCURY"] == 'on' or f[0].header["NEON"] == 'on' or f[0].header["ARGON"] == 'on' or f[0].header["CADMIUM"] == 'on' or f[0].header["ZINC"] == 'on' or f[0].header["KRYPTON"] == 'on' or f[0].header["XENON"] == 'on' or f[0].header["FEARGON"] == 'on') and f[0].header["TRAPDOOR"] == "closed":
 			print("arcs found" , name)
 			count_arc = count_arc +1 
         
