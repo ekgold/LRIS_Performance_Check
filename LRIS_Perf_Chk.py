@@ -137,6 +137,10 @@ for date_dir in date_lt:
 		if count_arc >= 3 and count_flat >= 3: 
 			print("Count Arc and Count Flat", count_arc , count_flat)
 			break 
+
+#Activate pypeit 
+
+pypeit_setup -s keck_lris_blue -r
     
 	if count_flat and count_arc >= 3: 
 		print("")
