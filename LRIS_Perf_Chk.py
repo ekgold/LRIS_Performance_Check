@@ -46,32 +46,18 @@ Koa.download (outdir + instr + "_parameters.tbl", \
 
 
 #code to orgainze files into different directories for pypeit to run through them 
-#os.system ("ls dnload_dir2/*")
-#file = "dnload_dir2/lev0/LB.20170319.19187.fits"          
 from astropy.io import fits
 
-#f = fits.open(file)
-#f[0].header ["SLITNAME"]
 
 #Organize Science Files 
 for name in glob.glob(datadir + '/lev0/*.fits'):
     f = fits.open(name)
     if f[0].header["SLITNAME"] == 'long_1.0':
-        if os.path.exists(datadir + "/" + f[0].header["DATE-OBS"]):
-         #   print("path exists")
-            os.system("cp " + name + " " + datadir + "/" +  f[0].header["DATE-OBS"] )
         else:
-          #  print("path doesnt exist making directory " + f[0].header["DATE-OBS"])
             os.system("mkdir " + " " + datadir + "/" +  f[0].header["DATE-OBS"] )
             os.system("cp " + name + " " + datadir + "/" +  f[0].header["DATE-OBS"])
-      #  print(name,f[0].header["DATE-OBS"])
        
-# Organize Calib Files 
 
-#for file in glob.glob(datadir + '/calib/*.fits'):
-   # from astropy.io import fits
-   # f = fits.open(file) 
-   # f[0].header ["SLITNAME"]
 
 
 date_lt = []
@@ -80,36 +66,17 @@ for name in glob.glob(datadir + '/calib/*.fits'):
     f = fits.open(name)
     if f[0].header["SLITNAME"] == 'long_1.0':
         if os.path.exists(datadir + "/" + f[0].header["DATE-OBS"]):
-            #print("path exists")
             os.system("cp " + name + " " + datadir + "/" + f[0].header["DATE-OBS"] )
         else:
-           # print("path doesnt exist making directory " + f[0].header["DATE-OBS"])
             os.system("mkdir " + " " + datadir + "/" +  f[0].header["DATE-OBS"] )
             os.system("cp " + name + " " + datadir + "/" + f[0].header["DATE-OBS"])
         date_lt.append(f[0].header["DATE-OBS"])        
 
 date_lt = list(set(date_lt))
-
-#Find files with Arcs and Flats 
-#print("PWD: ")
-#os.system ("pwd")
-#print(" ")
-
-#for name in glob.glob (datadir + "/calib/*.fits"):
-   # from astropy.io import fits
-   # f = fits.open(file) 
-#f[0].header ["MERCURY" or "NEON" or "ARGON" or "CADMIUM" or "ZINC" or "KRYPTON" or "XENON" or "FEAERGON"]
-
+ 
 count_arc = 0 
 count_flat = 0 
 total = 0
-
-
-
-#file = "2017-03-19/LB.20170319.04357.fits"
-#from astropy.io import fits
-#f = fits.open(file) 
-#f[0].header ["MERCURY" or "NEON" or "ARGON" or "CADMIUM" or "ZINC" or "KRYPTON" or "XENON" or "FEAERGON"]
 
 
 #arcs
@@ -125,6 +92,7 @@ for date_dir in date_lt:
 		if (f[0].header ["MERCURY"] == 'on' or f[0].header["NEON"] == 'on' or f[0].header["ARGON"] == 'on' or f[0].header["CADMIUM"] == 'on' or f[0].header["ZINC"] == 'on' or f[0].header["KRYPTON"] == 'on' or f[0].header["XENON"] == 'on' or f[0].header["FEARGON"] == 'on') and f[0].header["TRAPDOOR"] == "closed":
 			print("arcs found" , name)
 			count_arc = count_arc +1 
+			
         
     
 #flats 
@@ -134,20 +102,25 @@ for date_dir in date_lt:
 		total = total +1
     
     
-		if count_arc >= 3 and count_flat >= 3: 
+		if count_arc >= 1 and count_flat >= 3: 
 			print("Count Arc and Count Flat", count_arc , count_flat)
 			break 
+ 
+#Running Pypeit 
 
-#Activate pypeit 
+	if count_flat >=3 and count_arc >= 1: 
+		os.system("pypeit_setup -s keck_lris_blue -r  "+ datadir +"/" + date_dir +"/LB -c ALL")
+		calib = "[baseprocess]\n        use_biasimage = False\n[reduce]\n       [[skysub]]\n            det_min_spec_length=0.1\n               fit_min_spec_length=0.1"
+		files=glob.glob(datadir+‘/’+date_dir+‘/**/*.pypeit’)
 
-pypeit_setup -s keck_lris_blue -r
-    
-	if count_flat and count_arc >= 3: 
-		print("")
-		os.system("run_pypeit keck_lris_blue_B.pypeit -o")
+		for dataset in files: 
+        		with open(dataset, "r") as file:
+                		data = file.read()
+        		data = data.replace("# User-defined execution parameters", str(calib))
+			with open(dataset, "w") as file:
+				file.write(data)
+
+			os.system("run_pypeit dataset -o")
         
-    
 	else: 
 		print("not enough flats/arcs")
-
-
