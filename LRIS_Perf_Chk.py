@@ -19,7 +19,7 @@ instrument = 'LRIS'
 instr = 'lris'  
 outdir = './outputLR/'
 datadir = '/Users/egold/data/KOA'
-datetimerange = '2017-02-25 00:00:00/2017-03-25 23:59:59'
+datetimerange = '2021-01-01 00:00:00/2021-03-01 23:59:59'
 targname = 'G191B2B '
 
 #makes directory for files to be downloaded into 
@@ -53,6 +53,8 @@ from astropy.io import fits
 for name in glob.glob(datadir + '/lev0/*.fits'):
     f = fits.open(name)
     if f[0].header["SLITNAME"] == 'long_1.0':
+        if os.path.exists(datadir + "/" + f[0].header["DATE-OBS"]):
+            os.system("cp " + name + " " + datadir + "/" +  f[0].header["DATE-OBS"] )
         else:
             os.system("mkdir " + " " + datadir + "/" +  f[0].header["DATE-OBS"] )
             os.system("cp " + name + " " + datadir + "/" +  f[0].header["DATE-OBS"])
@@ -109,14 +111,15 @@ for date_dir in date_lt:
 #Running Pypeit 
 
 	if count_flat >=3 and count_arc >= 1: 
+		print("pypeit_setup -s keck_lris_blue -r  "+ datadir +"/" + date_dir +"/LB")
 		os.system("pypeit_setup -s keck_lris_blue -r  "+ datadir +"/" + date_dir +"/LB -c ALL")
 		calib = "[baseprocess]\n        use_biasimage = False\n[reduce]\n       [[skysub]]\n            det_min_spec_length=0.1\n               fit_min_spec_length=0.1"
-		files=glob.glob(datadir+‘/’+date_dir+‘/**/*.pypeit’)
+		files=glob.glob(datadir+'/'+date_dir+'/**/*.pypeit')
 
 		for dataset in files: 
-        		with open(dataset, "r") as file:
-                		data = file.read()
-        		data = data.replace("# User-defined execution parameters", str(calib))
+			with open(dataset, "r") as file:
+				data = file.read()
+			data = data.replace("# User-defined execution parameters", str(calib))
 			with open(dataset, "w") as file:
 				file.write(data)
 
