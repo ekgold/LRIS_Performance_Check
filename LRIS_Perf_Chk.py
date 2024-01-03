@@ -111,19 +111,20 @@ for date_dir in date_lt:
 #Running Pypeit 
 
 	if count_flat >=3 and count_arc >= 1: 
-		print("pypeit_setup -s keck_lris_blue -r  "+ datadir +"/" + date_dir +"/LB")
-		os.system("pypeit_setup -s keck_lris_blue -r  "+ datadir +"/" + date_dir +"/LB -c ALL")
-		calib = "[baseprocess]\n        use_biasimage = False\n[reduce]\n       [[skysub]]\n            det_min_spec_length=0.1\n               fit_min_spec_length=0.1"
-		files=glob.glob(datadir+'/'+date_dir+'/**/*.pypeit')
-
+		os.system("pypeit_setup -s keck_lris_blue -r  "+ datadir +"/" + date_dir +"/LB -c all")
+		calib = "[baseprocess]\n        use_biasimage = False\n[reduce]\n       [[skysub]]\n            bspline_spacing=0.6\n               local_maskwidth=2.0\n               sky_sigrej=3.0\n"
+		files=glob.glob('*/*.pypeit')		
+#		print(files)
+#		sys.exit()
 		for dataset in files: 
+			print("dataset", dataset)
 			with open(dataset, "r") as file:
 				data = file.read()
 			data = data.replace("# User-defined execution parameters", str(calib))
 			with open(dataset, "w") as file:
 				file.write(data)
 
-			os.system("run_pypeit dataset -o")
+			os.system("run_pypeit " +  dataset +  " -o")
         
 	else: 
 		print("not enough flats/arcs")
