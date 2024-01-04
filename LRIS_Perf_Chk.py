@@ -109,7 +109,8 @@ for date_dir in date_lt:
 			break 
  
 #Running Pypeit 
-
+try:
+	print("It works.") 
 	if count_flat >=3 and count_arc >= 1: 
 		os.system("pypeit_setup -s keck_lris_blue -r  "+ datadir +"/" + date_dir +"/LB -c all")
 		calib = "[baseprocess]\n        use_biasimage = False\n[reduce]\n       [[skysub]]\n            bspline_spacing=0.6\n               local_maskwidth=2.0\n               sky_sigrej=3.0\n"
@@ -125,6 +126,17 @@ for date_dir in date_lt:
 				file.write(data)
 
 			os.system("run_pypeit " +  dataset +  " -o")
-        
+except Exception as e: 
+	print(e)
+	try:	
+		print("It works.")		
+		files=glob.glob("*/*G191B2B*sens.fits") 
+		for datafunc in files:
+			print("datafunc", datafunc) 
+			with open (datafunc, "r") as file:
+				data = file.read()
+				os.system("pypeit_sensfunc spec1d*G191B2B*.fits " + datafunc + "  -o")
+	except Exception as e:
+		print(e)        
 	else: 
 		print("not enough flats/arcs")
