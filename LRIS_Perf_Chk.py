@@ -19,7 +19,7 @@ instrument = 'LRIS'
 instr = 'lris'  
 outdir = './outputLR/'
 datadir = '/Users/egold/data/KOA'
-datetimerange = '2021-01-01 00:00:00/2021-03-01 23:59:59'
+datetimerange = '2020-08-01 00:00:00/2020-09-01 23:59:59'
 targname = 'G191B2B '
 
 #makes directory for files to be downloaded into 
@@ -129,14 +129,17 @@ try:
 except Exception as e: 
 	print(e)
 	try:	
-		print("It works.")		
-		files=glob.glob("*/*G191B2B*sens.fits") 
+		print("This works.")		
+
+		files=glob.glob("*/*G191B2B") 
 		for datafunc in files:
 			print("datafunc", datafunc) 
 			with open (datafunc, "r") as file:
 				data = file.read()
-				os.system("pypeit_sensfunc spec1d*G191B2B*.fits " + datafunc + "  -o")
+				os.system("pypeit_sensfunc */*spec1d*fits " + datafunc + "  -o after_flux")
 	except Exception as e:
 		print(e)        
 	else: 
 		print("not enough flats/arcs")
+
+	
