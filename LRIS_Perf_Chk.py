@@ -128,8 +128,8 @@ try:
 			os.system("run_pypeit " +  dataset +  " -o")
 except Exception as e: 
 	print(e)
-	try:	
-		print("Now Running Fluxing")		
+try:	
+	print("Now Running Fluxing")		
 
 		files=glob.glob("*/*G191B2B") 
 		for datafunc in files:
@@ -137,9 +137,11 @@ except Exception as e:
 			with open (datafunc, "r") as file:
 				data = file.read()
 				os.system("pypeit_sensfunc */*spec1d*fits " + datafunc + "  -o" + datafunc + " after_flux")
-	except Exception as e:
-		print(e)        
+	        
 	else: 
 		print("not enough flats/arcs")
+
+except Expection as e: 
+	print(e)
 
 	
