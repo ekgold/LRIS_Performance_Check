@@ -19,7 +19,7 @@ instrument = 'LRIS'
 instr = 'lris'  
 outdir = './outputLR/'
 datadir = '/Users/egold/data/KOA'
-datetimerange = '2021-10-01 00:00:00/2021-12-31 23:59:59'
+datetimerange = '2020-08-22 00:00:00/2020-08-23 23:59:59'
 targname = 'G191B2B '
 
 #makes directory for files to be downloaded into 
@@ -109,39 +109,43 @@ for date_dir in date_lt:
 			break 
  
 #Running Pypeit 
-try:
-	print("Now Running Pypeit") 
-	if count_flat >=3 and count_arc >= 1: 
-		os.system("pypeit_setup -s keck_lris_blue -r  "+ datadir +"/" + date_dir +"/LB -c all")
-		calib = "[baseprocess]\n        use_biasimage = False\n[reduce]\n       [[skysub]]\n            bspline_spacing=0.6\n               local_maskwidth=2.0\n               sky_sigrej=3.0\n"
-		files=glob.glob('*/*.pypeit')		
+	try:
+		print("Now Running Pypeit") 
+		if count_flat >=3 and count_arc >= 1: 
+			os.system("pypeit_setup -s keck_lris_blue -r  "+ datadir +"/" + date_dir +"/LB -c all")		
+			calib = "[baseprocess]\n        use_biasimage = False\n[reduce]\n       [[skysub]]\n            bspline_spacing=0.6\n               local_maskwidth=2.0\n               sky_sigrej=3.0\n"
+			files=glob.glob('*/*.pypeit')		
 #		print(files)
 #		sys.exit()
 		for dataset in files: 
 			print("dataset", dataset)
 			with open(dataset, "r") as file:
 				data = file.read()
-			data = data.replace("# User-defined execution parameters", str(calib))
+				data = data.replace("# User-defined execution parameters", str(calib))
 			with open(dataset, "w") as file:
 				file.write(data)
+		
+				os.system("run_pypeit " +  dataset +  " -o")
+		else: 
+			print("Not enough flats or arcs to run pypeit")
+	except Exception as e: 
+		print(e)
+#	try:	
+		print("Now Running Fluxing")		
 
-			os.system("run_pypeit " +  dataset +  " -o")
-except Exception as e: 
-	print(e)
-try:	
-	print("Now Running Fluxing")		
-
-		files=glob.glob("*/*G191B2B") 
-		for datafunc in files:
-			print("datafunc", datafunc) 
-			with open (datafunc, "r") as file:
-				data = file.read()
-				os.system("pypeit_sensfunc */*spec1d*fits " + datafunc + "  -o" + datafunc + " after_flux")
+		files=glob.glob("*/*spec1d")
+		print("Printing Files")
+		print (files) 
+	#	for datafunc in files:
+	#		print("datafunc", datafunc) 
+	#		with open (datafunc, "r") as file:
+	#			data = file.read()
+	#			os.system(“pypeit_sensfunc spec1d  -o” + datafunc + “after_flux”)
 	        
-	else: 
-		print("not enough flats/arcs")
+#		else: 
+	#		print("Fluxing did not work")
 
-except Expection as e: 
-	print(e)
-
+#	except Expection as e: 
+#		print(e)
+#
 	
