@@ -133,13 +133,8 @@ for date_dir in date_lt:
 #	try:	
 		print("Now Running Fluxing")		
 
-		files=glob.glob("*/*spec1d")
+	#	files=glob.glob("*/*spec1d")
 		print("Printing Files")
-		print (files) 
-	#	for datafunc in files:
-	#		print("datafunc", datafunc) 
-	#		with open (datafunc, "r") as file:
-	#			data = file.read()
 	#			os.system(“pypeit_sensfunc spec1d  -o” + datafunc + “after_flux”)
 	        
 #		else: 
