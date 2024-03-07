@@ -19,7 +19,7 @@ instrument = 'LRIS'
 instr = 'lris'  
 outdir = './outputLR/'
 datadir = '/Users/egold/data/KOA'
-datetimerange = '2020-08-22 00:00:00/2020-08-23 23:59:59'
+datetimerange = '2021-01-01 00:00:00/2021-12-31 23:59:59'
 targname = 'G191B2B '
 
 #makes directory for files to be downloaded into 
@@ -114,9 +114,8 @@ for date_dir in date_lt:
 		if count_flat >=3 and count_arc >= 1: 
 			os.system("pypeit_setup -s keck_lris_blue -r  "+ datadir +"/" + date_dir +"/LB -c all")		
 			calib = "[baseprocess]\n        use_biasimage = False\n[reduce]\n       [[skysub]]\n            bspline_spacing=0.6\n               local_maskwidth=2.0\n               sky_sigrej=3.0\n"
-			files=glob.glob('*/*.pypeit')		
-#		print(files)
-#		sys.exit()
+			files=glob.glob('*/*.pypeit')	
+
 		for dataset in files: 
 			print("dataset", dataset)
 			with open(dataset, "r") as file:
@@ -130,17 +129,14 @@ for date_dir in date_lt:
 			print("Not enough flats or arcs to run pypeit")
 	except Exception as e: 
 		print(e)
-#	try:	
-		print("Now Running Fluxing")		
-
-	#	files=glob.glob("*/*spec1d")
-		print("Printing Files")
-	#			os.system(“pypeit_sensfunc spec1d  -o” + datafunc + “after_flux”)
+#Running Fluxing 
+	try:	
+		print("Now Running Fluxing")	 
+		for datafunc in glob.iglob('/Users/egold/Desktop/keck_lris_blue_B/GitHub/LRIS-Performance-Check/**/*.spec1d', recursive = True) :
+				os.system('pypeit_sensfunc spec1dfile  -o' + datafunc + 'after_flux')
 	        
-#		else: 
-	#		print("Fluxing did not work")
+		else: 
+			print("Fluxing did not work")
 
-#	except Expection as e: 
-#		print(e)
-#
-	
+	except Exception as e: 
+		print(e)	
