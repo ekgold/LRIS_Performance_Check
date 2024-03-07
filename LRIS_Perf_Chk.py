@@ -132,8 +132,11 @@ for date_dir in date_lt:
 #Running Fluxing 
 	try:	
 		print("Now Running Fluxing")	 
-		for datafunc in glob.iglob('/Users/egold/Desktop/keck_lris_blue_B/GitHub/LRIS-Performance-Check/**/*.spec1d', recursive = True) :
-				os.system('pypeit_sensfunc spec1dfile  -o' + datafunc + 'after_flux')
+			
+			files=glob.glob("spec1dfile**.fits")	
+			for file in files:
+				print(file)
+				os.system('pypeit_sensfunc' +  file  -o' + 'after_flux')
 	        
 		else: 
 			print("Fluxing did not work")
