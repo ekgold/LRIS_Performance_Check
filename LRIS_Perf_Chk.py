@@ -124,7 +124,7 @@ for date_dir in date_lt:
 			with open(dataset, "w") as file:
 				file.write(data)
 		
-				os.system('run_pypeit ' +  dataset +  ' -o')
+				os.system('run_pypeit ' +  dataset +  ' -o' + file + ' sens ')
 		else: 
 			print("Not enough flats or arcs to run pypeit")
 	except Exception as e: 
@@ -133,10 +133,10 @@ for date_dir in date_lt:
 	try:	
 		print("Now Running Fluxing")	 
 			
-			files=glob.glob("spec1dfile**.fits")	
-			for file in files:
-				print(file)
-				os.system('pypeit_sensfunc' +  file + ' -o')
+		files=glob.glob("spec1dfile**.fits")	
+		for file in files:
+			print(file)
+			os.system('pypeit_sensfunc' +  file + ' -o')
 	        
 		else: 
 			print("Fluxing did not work")
