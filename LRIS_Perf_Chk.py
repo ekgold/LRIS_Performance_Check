@@ -136,10 +136,10 @@ for date_dir in date_lt:
 		files=glob.glob("Science/spec1dfile**.fits")	
 		for file in files:
 			print(file)
-			os.system('pypeit_sensfunc' +  file + ' -o' + file + '_sens')
-	        
-		else: 
-			print("Fluxing did not work")
+			os.system('pypeit_sensfunc' +  file + ' -o' + file + '_sens')	        
+
 
 	except Exception as e: 
 		print(e)	
+		print("Fluxing did not work")
+
