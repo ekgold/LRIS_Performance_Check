@@ -19,7 +19,7 @@ instrument = 'LRIS'
 instr = 'lris'  
 outdir = './outputLR/'
 datadir = '/Users/egold/data/KOA'
-datetimerange = '2021-01-01 00:00:00/2021-12-31 23:59:59'
+datetimerange = '2021-01-01 00:00:00/2021-02-01 23:59:59'
 targname = 'G191B2B '
 
 #makes directory for files to be downloaded into 
@@ -116,13 +116,13 @@ for date_dir in date_lt:
 			calib = "[baseprocess]\n        use_biasimage = False\n[reduce]\n       [[skysub]]\n            bspline_spacing=0.6\n               local_maskwidth=2.0\n               sky_sigrej=3.0\n"
 			files=glob.glob('*/*.pypeit')	
 
-		for dataset in files: 
-			print("dataset", dataset)
-			with open(dataset, "r") as file:
-				data = file.read()
-				data = data.replace("# User-defined execution parameters", str(calib))
-			with open(dataset, "w") as file:
-				file.write(data)
+			for dataset in files: 
+				print("dataset", dataset)
+				with open(dataset, "r") as file:
+					data = file.read()
+					data = data.replace("# User-defined execution parameters", str(calib))
+				with open(dataset, "w") as file:
+					file.write(data)
 		
 				os.system('run_pypeit ' +  dataset +  ' -o')
 		else: 
