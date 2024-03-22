@@ -19,7 +19,7 @@ instrument = 'LRIS'
 instr = 'lris'  
 outdir = './outputLR/'
 datadir = '/Users/egold/data/KOA'
-datetimerange = '2021-01-01 00:00:00/2021-02-01 23:59:59'
+datetimerange = '2021-09-07 00:00:00/2021-09-08 23:59:59'
 targname = 'G191B2B '
 
 #makes directory for files to be downloaded into 
