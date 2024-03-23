@@ -134,10 +134,18 @@ for date_dir in date_lt:
 		print("Now Running Fluxing")	 
 			
 		files=glob.glob("Science/spec1d**.fits")	
+		if os.path.isdir('sens_outputs')==False:
+			os.system('mkdir sens_outputs')
 		for file in files:
 			print(file)
-			os.system('pypeit_sensfunc ' +  file  + ' -o ' + file + '_sens')	        
-
+			os.system('pypeit_sensfunc ' +  file  + ' -o ' + ' /sens_outputs '  + file + '_sens')	        
+			print('rm -r ' + datadir + '/*') 
+			print('rm -r ' + outdir + '/*')
+			print('rm -r ' + 'QA/*')
+			print('rm -r ' + 'Callibrations/*')
+			print('rm -r ' + 'Science/*')
+			print('rm -r ' + 'outputLR/*') 
+			print('rm -r ' + 'keck_lris_*/*')   
 
 	except Exception as e: 
 		print(e)	
