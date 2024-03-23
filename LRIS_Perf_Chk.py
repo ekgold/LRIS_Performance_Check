@@ -138,16 +138,19 @@ for date_dir in date_lt:
 			os.system('mkdir sens_outputs')
 		for file in files:
 			print(file)
-			os.system('pypeit_sensfunc ' +  file  + ' -o ' + ' /sens_outputs '  + file + '_sens')	        
-		print('rm -r ' + datadir + '/*') 
-		print('rm -r ' + outdir + '/*')
-		print('rm -r ' + 'QA/*')
-		print('rm -r ' + 'Callibrations/*')
-		print('rm -r ' + 'Science/*')
-		print('rm -r ' + 'outputLR/*') 
-		print('rm -r ' + 'keck_lris_*/*')   
+			os.system('pypeit_sensfunc ' +  file  + ' -o ' + ' ./sens_outputs '  + file + '_sens')	        
+#Cleaning Directories
+		os.system('rm -r ' + 'QA/*')
+		os.system('rm -r ' + 'Callibrations/*')
+		os.system('rm -r ' + 'Science/*')) 
+		os.system('rm -r ' + 'keck_lris_*/*')   
 
 	except Exception as e: 
 		print(e)	
 		print("Fluxing did not work")
+
+#Cleaning out KOA
+	print('Cleaning out KOA')
+	os.system('rm -r ' + datadir + '/*')
+	os.system('rm -r ' + outdir + '/*')
 
