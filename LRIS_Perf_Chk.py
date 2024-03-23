@@ -133,10 +133,10 @@ for date_dir in date_lt:
 	try:	
 		print("Now Running Fluxing")	 
 			
-		files=glob.glob("Science/spec1dfile**.fits")	
+		files=glob.glob("Science/spec1d**.fits")	
 		for file in files:
 			print(file)
-			os.system('pypeit_sensfunc' +  file + ' -o' + file + '_sens')	        
+			os.system('pypeit_sensfunc ' +  file  + ' -o ' + file + '_sens')	        
 
 
 	except Exception as e: 
