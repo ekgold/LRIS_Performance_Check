@@ -139,13 +139,13 @@ for date_dir in date_lt:
 		for file in files:
 			print(file)
 			os.system('pypeit_sensfunc ' +  file  + ' -o ' + ' /sens_outputs '  + file + '_sens')	        
-			print('rm -r ' + datadir + '/*') 
-			print('rm -r ' + outdir + '/*')
-			print('rm -r ' + 'QA/*')
-			print('rm -r ' + 'Callibrations/*')
-			print('rm -r ' + 'Science/*')
-			print('rm -r ' + 'outputLR/*') 
-			print('rm -r ' + 'keck_lris_*/*')   
+		print('rm -r ' + datadir + '/*') 
+		print('rm -r ' + outdir + '/*')
+		print('rm -r ' + 'QA/*')
+		print('rm -r ' + 'Callibrations/*')
+		print('rm -r ' + 'Science/*')
+		print('rm -r ' + 'outputLR/*') 
+		print('rm -r ' + 'keck_lris_*/*')   
 
 	except Exception as e: 
 		print(e)	
